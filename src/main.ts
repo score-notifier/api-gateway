@@ -28,7 +28,7 @@ async function bootstrap() {
 
   await app.listen(envs.port);
 
-  logger.log(`API Gateway running on port ${envs.port}`);
+  logger.log(`API Gateway running on port ${envs.port}!`);
 }
 
 bootstrap();
