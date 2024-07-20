@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Inject } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Inject,
+  Get,
+  Param,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 
 import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
@@ -22,6 +30,24 @@ export class UsersController {
   @Post('subscribe')
   createSubscription(@Body() createSubscriptionDto: CreateSubscriptionDto) {
     return this.client.send('user.subscribe.team', createSubscriptionDto).pipe(
+      catchError((error) => {
+        throw new RpcException(error);
+      }),
+    );
+  }
+
+  @Get()
+  getUsers() {
+    return this.client.send('user.get.all', {}).pipe(
+      catchError((error) => {
+        throw new RpcException(error);
+      }),
+    );
+  }
+
+  @Get(':userId/subscriptions')
+  getUserSubscriptions(@Param('userId', ParseUUIDPipe) userId: string) {
+    return this.client.send('user.get.subscriptions', { userId }).pipe(
       catchError((error) => {
         throw new RpcException(error);
       }),
