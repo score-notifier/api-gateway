@@ -3,10 +3,18 @@ import { AppModule } from './app.module';
 import { envs } from './config';
 import { Logger, RequestMethod, ValidationPipe } from '@nestjs/common';
 import { RpcCustomExceptionFilter } from './common';
+import {
+  FastifyAdapter,
+  NestFastifyApplication,
+} from '@nestjs/platform-fastify';
+import compression from '@fastify/compress';
 
 async function bootstrap() {
   const logger = new Logger('ApiGateway');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+  );
 
   app.setGlobalPrefix('api', {
     exclude: [
@@ -26,7 +34,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(new RpcCustomExceptionFilter());
 
-  await app.listen(envs.port);
+  await app.register(compression);
+
+  await app.listen(envs.port, '0.0.0.0');
 
   logger.log(`API Gateway running on port ${envs.port}!`);
 }
