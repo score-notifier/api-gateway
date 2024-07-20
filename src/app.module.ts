@@ -5,11 +5,13 @@ import { UsersModule } from './users/users.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CompetitionsModule } from './competitions/competitions.module';
 import { StatsModule } from './stats/stats.module';
+import { CacheModule } from './cache/cache.module';
 
 @Module({
   imports: [
     HealthCheckModule,
     NatsModule,
+    CacheModule,
     UsersModule,
     NotificationsModule,
     CompetitionsModule,

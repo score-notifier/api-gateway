@@ -1,6 +1,8 @@
 import { Type } from 'class-transformer';
 import { IsOptional, IsPositive } from 'class-validator';
 
+// TODO:
+// Implement Pagination on the API Gateway and the microservices
 export class PaginationDto {
   @IsPositive()
   @IsOptional()

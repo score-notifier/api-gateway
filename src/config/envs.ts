@@ -4,12 +4,20 @@ import * as joi from 'joi';
 interface EnvVars {
   PORT: number;
   NATS_SERVERS: string[];
+  REDIS_HOST: string;
+  REDIS_PORT: number;
+  REDIS_CACHE_MAX: number;
+  REDIS_CACHE_TTL: number;
 }
 
 const envsSchema = joi
   .object({
     PORT: joi.number().required(),
     NATS_SERVERS: joi.array().items(joi.string()).required(),
+    REDIS_HOST: joi.string().required(),
+    REDIS_PORT: joi.number().required(),
+    REDIS_CACHE_MAX: joi.number().required(),
+    REDIS_CACHE_TTL: joi.number().required(),
   })
   .unknown(true);
 
@@ -27,4 +35,8 @@ const envVars: EnvVars = value;
 export const envs = {
   port: envVars.PORT,
   natsServers: envVars.NATS_SERVERS,
+  redisHost: envVars.REDIS_HOST,
+  redisPort: envVars.REDIS_PORT,
+  redisCacheTTL: envVars.REDIS_CACHE_TTL,
+  redisCacheMax: envVars.REDIS_CACHE_MAX,
 };

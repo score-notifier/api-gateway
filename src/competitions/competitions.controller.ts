@@ -4,12 +4,15 @@ import { NATS_SERVICE } from 'src/config';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 
 import { catchError } from 'rxjs';
+import { CacheTTL } from '@nestjs/cache-manager';
+import { CACHE_DURATION } from '../common';
 
 @Controller('competitions')
 export class CompetitionsController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Get('leagues')
+  @CacheTTL(CACHE_DURATION.ONE_HOUR)
   getLeagues() {
     return this.client.send('competitions.get.leagues', {}).pipe(
       catchError((error) => {
@@ -19,6 +22,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams')
+  @CacheTTL(CACHE_DURATION.ONE_HOUR)
   async getTeams(@Param('leagueId', ParseUUIDPipe) leagueId: string) {
     return this.client.send('competitions.leagues', { leagueId }).pipe(
       catchError((error) => {
@@ -28,6 +32,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams/:teamId/matches')
+  @CacheTTL(CACHE_DURATION.TEN_MINUTES)
   async getMatches(
     @Param('leagueId') leagueId: string,
     @Param('teamId') teamId: string,
@@ -42,6 +47,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams/:teamId/upcoming-matches')
+  @CacheTTL(CACHE_DURATION.THIRTY_MINUTES)
   async getUpcomingMatches(
     @Param('leagueId') leagueId: string,
     @Param('teamId') teamId: string,
