@@ -10,7 +10,7 @@ export class StatsController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Get('leagues/:leagueId/standings')
-  @CacheTTL(CACHE_DURATION.ONE_HOUR)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getLeagueStandings(@Param('leagueId', ParseUUIDPipe) leagueId: string) {
     return this.client.send('stats.league.standings', { leagueId }).pipe(
       catchError((error) => {
@@ -20,7 +20,7 @@ export class StatsController {
   }
 
   @Get('teams/:teamId')
-  @CacheTTL(CACHE_DURATION.TEN_MINUTES)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getTeamStats(@Param('teamId', ParseUUIDPipe) teamId: string) {
     return this.client.send('stats.team', { teamId }).pipe(
       catchError((error) => {

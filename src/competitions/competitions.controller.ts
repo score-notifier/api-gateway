@@ -12,7 +12,7 @@ export class CompetitionsController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
   @Get('leagues')
-  @CacheTTL(CACHE_DURATION.ONE_HOUR)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   getLeagues() {
     return this.client.send('competitions.get.leagues', {}).pipe(
       catchError((error) => {
@@ -22,7 +22,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams')
-  @CacheTTL(CACHE_DURATION.ONE_HOUR)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getTeams(@Param('leagueId', ParseUUIDPipe) leagueId: string) {
     return this.client.send('competitions.leagues', { leagueId }).pipe(
       catchError((error) => {
@@ -32,7 +32,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams/:teamId/matches')
-  @CacheTTL(CACHE_DURATION.TEN_MINUTES)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getMatches(
     @Param('leagueId') leagueId: string,
     @Param('teamId') teamId: string,
@@ -47,7 +47,7 @@ export class CompetitionsController {
   }
 
   @Get('leagues/:leagueId/teams/:teamId/upcoming-matches')
-  @CacheTTL(CACHE_DURATION.THIRTY_MINUTES)
+  @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getUpcomingMatches(
     @Param('leagueId') leagueId: string,
     @Param('teamId') teamId: string,
