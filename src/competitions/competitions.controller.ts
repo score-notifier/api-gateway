@@ -34,8 +34,8 @@ export class CompetitionsController {
   @Get('leagues/:leagueId/teams/:teamId/matches')
   @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getMatches(
-    @Param('leagueId') leagueId: string,
-    @Param('teamId') teamId: string,
+    @Param('leagueId', ParseUUIDPipe) leagueId: string,
+    @Param('teamId', ParseUUIDPipe) teamId: string,
   ) {
     return this.client
       .send('competitions.leagues.matches', { leagueId, teamId })
@@ -49,8 +49,8 @@ export class CompetitionsController {
   @Get('leagues/:leagueId/teams/:teamId/upcoming-matches')
   @CacheTTL(CACHE_DURATION.ONE_MINUTE)
   async getUpcomingMatches(
-    @Param('leagueId') leagueId: string,
-    @Param('teamId') teamId: string,
+    @Param('leagueId', ParseUUIDPipe) leagueId: string,
+    @Param('teamId', ParseUUIDPipe) teamId: string,
   ) {
     return this.client
       .send('competitions.leagues.upcoming.matches', { leagueId, teamId })
