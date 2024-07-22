@@ -6,7 +6,6 @@ interface EnvVars {
   NATS_SERVERS: string[];
   REDIS_HOST: string;
   REDIS_PORT: number;
-  REDIS_CACHE_MAX: number;
   REDIS_CACHE_TTL: number;
 }
 
@@ -16,7 +15,6 @@ const envsSchema = joi
     NATS_SERVERS: joi.array().items(joi.string()).required(),
     REDIS_HOST: joi.string().required(),
     REDIS_PORT: joi.number().required(),
-    REDIS_CACHE_MAX: joi.number().required(),
     REDIS_CACHE_TTL: joi.number().required(),
   })
   .unknown(true);
@@ -38,5 +36,4 @@ export const envs = {
   redisHost: envVars.REDIS_HOST,
   redisPort: envVars.REDIS_PORT,
   redisCacheTTL: envVars.REDIS_CACHE_TTL,
-  redisCacheMax: envVars.REDIS_CACHE_MAX,
 };
